@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        function clearForm() {
+            document.getElementById('days').value = '';  
+            document.getElementById('results').innerHTML = ''; 
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Cryptocurrency Price Prediction</h1>
+        <form action="/predict" method="POST">
+            <label for="days">Enter Number of Days Into the Future:</label>
+            <input type="number" id="days" name="days" required min="1" max="100" placeholder="e.g., 5">
+            <div class="button-group">
+                <button type="submit">Predict Price</button>
+                <button type="button" onclick="clearForm()">Clear</button>
+            </div>
+        </form>
+
+        {% if prediction %}
+        <div class="result" id="results">
+            <h2>Future Predicted Prices</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Random Forest Prediction</th>
+                        <th>KNN Prediction</th>
+                        <th>Combined Prediction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day, rf_price, knn_price, combined_price in prediction %}
+                    <tr>
+                        <td>{{ day }}</td>
+                        <td>{{ rf_price }}</td>
+                        <td>{{ knn_price }}</td>
+                        <td>{{ combined_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
